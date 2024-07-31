@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: Login to Azure Public Cloud
+      - name: Login to Azure Public Cloud    
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
