@@ -48,7 +48,7 @@ jobs:
           echo "Y" | npm init -y @azure/microsoft-playwright-testing-private-preview
 
       - name: Run Playwright tests        
-        run: npx playwright test -c playwright.service.config.ts --reporter=allure-playwright
+        run: npx playwright test -c playwright.service.config.ts --reporter=allure-playwright --workers=15
         env:
             PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
       - name: Load test report history
