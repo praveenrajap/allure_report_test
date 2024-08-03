@@ -1229,3 +1229,234 @@ test.describe('Custom Annotation Tests', () => {
   });
 });
 
+//-------------------------------------------------------------second
+
+
+const { Severity } = require('allure-js-commons');
+
+
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('https://www.saucedemo.com/');
+});
+
+// Login Tests
+test.describe('Login Tests1', () => {
+  test('Successful login with valid credentials [Allure Step]', async ({ page }) => {
+    await allure.description("This test verifies a successful login with valid credentials.");
+    await allure.epic("Web interface");
+    await allure.feature("Essential features");
+    await allure.story("Authentication");
+    await allure.severity(Severity.CRITICAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("AUTH-123", "https://example.com/issues/AUTH-123");
+    await allure.tms("TMS-456", "https://example.com/tms/TMS-456");
+
+    await allure.step('Fill username', async () => {
+      await page.fill('#user-name', 'standard_user');
+    });
+    await allure.step('Fill password', async () => {
+      await page.fill('#password', 'secret_sauce');
+    });
+    await allure.step('Click login button', async () => {
+      await page.click('#login-button');
+    });
+    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
+  });
+
+  test('Unsuccessful login with invalid credentials [Allure Step]2', async ({ page }) => {
+    await allure.description("This test verifies an unsuccessful login with invalid credentials.");
+    await allure.epic("Web interface");
+    await allure.feature("Essential features");
+    await allure.story("Authentication");
+    await allure.severity(Severity.CRITICAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("AUTH-124", "https://example.com/issues/AUTH-124");
+    await allure.tms("TMS-457", "https://example.com/tms/TMS-457");
+
+    await allure.step('Fill username', async () => {
+      await page.fill('#user-name', 'invalid_user');
+    });
+    await allure.step('Fill password', async () => {
+      await page.fill('#password', 'invalid_sauce');
+    });
+    await allure.step('Click login button', async () => {
+      await page.click('#login-button');
+    });
+    await expect(page.locator('.error-message-container')).toBeVisible();
+  });
+});
+
+// Product Interaction Tests
+test.describe('Product Interaction Tests2', () => {
+  test('Add a product to the cart [Allure Step]', async ({ page }) => {
+    await allure.description("This test adds a product to the cart.");
+    await allure.epic("Web interface");
+    await allure.feature("Product interactions");
+    await allure.story("Adding products");
+    await allure.severity(Severity.NORMAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("PROD-125", "https://example.com/issues/PROD-125");
+    await allure.tms("TMS-458", "https://example.com/tms/TMS-458");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Add product to cart', async () => {
+      await page.click('.inventory_item button');
+    });
+    await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
+  });
+
+  test('Remove a product from the cart [Allure Step]2', async ({ page }) => {
+    await allure.description("This test removes a product from the cart.");
+    await allure.epic("Web interface");
+    await allure.feature("Product interactions");
+    await allure.story("Removing products");
+    await allure.severity(Severity.NORMAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("PROD-126", "https://example.com/issues/PROD-126");
+    await allure.tms("TMS-459", "https://example.com/tms/TMS-459");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Add and remove product from cart', async () => {
+      await page.click('.inventory_item button');
+      await page.click('.inventory_item button');
+    });
+    await expect(page.locator('.shopping_cart_badge')).toBeHidden();
+  });
+
+  test('View product details [Allure Step]2', async ({ page }) => {
+    await allure.description("This test views product details.");
+    await allure.epic("Web interface");
+    await allure.feature("Product interactions");
+    await allure.story("Viewing products");
+    await allure.severity(Severity.NORMAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("PROD-127", "https://example.com/issues/PROD-127");
+    await allure.tms("TMS-460", "https://example.com/tms/TMS-460");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('View product details', async () => {
+      await page.click('.inventory_item a');
+    });
+    await expect(page.locator('.inventory_details')).toBeVisible();
+  });
+
+  // Flaky Test
+  test('Flaky test for adding product to cart [Allure Flaky]2', async ({ page }) => {
+    allure.label('flaky', 'true');
+    await allure.description("This test adds a product to the cart with intentional delay to make it flaky.");
+    await allure.epic("Web interface");
+    await allure.feature("Product interactions");
+    await allure.story("Adding products");
+    await allure.severity(Severity.MINOR);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("PROD-128", "https://example.com/issues/PROD-128");
+    await allure.tms("TMS-461", "https://example.com/tms/TMS-461");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Add product to cart', async () => {
+      await page.click('.inventory_item button');
+    });
+    await page.waitForTimeout(5000); // Intentional delay to make test flaky
+    await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
+  });
+});
+
+// Cart Management Tests
+test.describe('Cart Management Tests2', () => {
+  test('Proceed to checkout [Allure Step]', async ({ page }) => {
+    await allure.description("This test proceeds to checkout from the cart.");
+    await allure.epic("Web interface");
+    await allure.feature("Cart management");
+    await allure.story("Checkout process");
+    await allure.severity(Severity.CRITICAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("CART-129", "https://example.com/issues/CART-129");
+    await allure.tms("TMS-462", "https://example.com/tms/TMS-462");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Navigate to cart', async () => {
+      await page.click('.shopping_cart_link');
+    });
+    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html');
+  });
+
+  test('Continue shopping from cart [Allure Step]2', async ({ page }) => {
+    await allure.description("This test continues shopping from the cart.");
+    await allure.epic("Web interface");
+    await allure.feature("Cart management");
+    await allure.story("Continue shopping");
+    await allure.severity(Severity.NORMAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("CART-130", "https://example.com/issues/CART-130");
+    await allure.tms("TMS-463", "https://example.com/tms/TMS-463");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Navigate to cart', async () => {
+      await page.click('.shopping_cart_link');
+    });
+    await allure.step('Continue shopping', async () => {
+      await page.click('#continue-shopping');
+    });
+    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
+  });
+
+  test('Complete a purchase [Allure Step]2', async ({ page }) => {
+    await allure.description("This test completes a purchase.");
+    await allure.epic("Web interface");
+    await allure.feature("Cart management");
+    await allure.story("Complete purchase");
+    await allure.severity(Severity.CRITICAL);
+    await allure.link("https://example.com/docs", "Related Documentation");
+    await allure.issue("CART-131", "https://example.com/issues/CART-131");
+    await allure.tms("TMS-464", "https://example.com/tms/TMS-464");
+
+    await page.fill('#user-name', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await allure.step('Login to inventory', async () => {
+      await page.click('#login-button');
+    });
+    await allure.step('Add product to cart', async () => {
+      await page.click('.inventory_item button');
+    });
+    await allure.step('Navigate to cart', async () => {
+      await page.click('.shopping_cart_link');
+    });
+    await allure.step('Proceed to checkout', async () => {
+      await page.click('#checkout');
+    });
+    await allure.step('Fill checkout info', async () => {
+      await page.fill('#first-name', 'Test');
+      await page.fill('#last-name', 'User');
+      await page.fill('#postal-code', '12345');
+    });
+    await allure.step('Complete purchase', async () => {
+      await page.click('#finish');
+    });
+    await expect(page.locator('.complete-header')).toHaveText('THANK YOU FOR YOUR ORDER');
+  });
+});
